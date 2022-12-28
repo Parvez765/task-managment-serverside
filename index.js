@@ -61,6 +61,14 @@ async function run() {
             const result = await taskCollection.updateOne(filter, updateDoc, options);
             res.send(result)
         })
+
+        // Task Delete
+        app.delete("/task/:id", async(req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await taskCollection.deleteOne(query)
+            res.send(result)
+        })
     }
     finally {
         
