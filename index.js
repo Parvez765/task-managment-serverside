@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 const cors = require("cors")
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000
 
 // MiddleWare
@@ -31,6 +31,34 @@ async function run() {
             const email = req.params.email
             const query = { email: email }
             const result = await taskCollection.find(query).toArray()
+            res.send(result)
+        })
+
+        // Task Update
+        app.put("/task/:id", async (req, res) => {
+            const id = req.params.id
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: {
+                 isCompleted : true
+                },
+            };
+            const result = await taskCollection.updateOne(filter, updateDoc, options);
+            res.send(result)
+        })
+
+        // Task Not Completed Api
+        app.put("/tasks/:id", async (req, res) => {
+            const id = req.params.id
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: {
+                 isCompleted : false
+                },
+            };
+            const result = await taskCollection.updateOne(filter, updateDoc, options);
             res.send(result)
         })
     }
