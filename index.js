@@ -18,6 +18,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const taskCollection = client.db("todos").collection("taskCollection")
+        const commentCollection = client.db("todos").collection("commentCollection")
 
         // Task Post Api
         app.post("/task", async(req, res) => {
@@ -59,6 +60,15 @@ async function run() {
                 },
             };
             const result = await taskCollection.updateOne(filter, updateDoc, options);
+            res.send(result)
+        })
+
+        // Post Api for comment
+        app.post("/taskcomment", async(req, res) => {
+            const addComment = req.body
+            console.log(addComment)
+            
+            const result = await commentCollection.insertOne(addComment)
             res.send(result)
         })
 
