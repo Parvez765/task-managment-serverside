@@ -25,6 +25,14 @@ async function run() {
             const result = await taskCollection.insertOne(task)
             res.send(result)
         })
+
+        // Task Get Api
+        app.get("/task/:email", async(req, res) => {
+            const email = req.params.email
+            const query = { email: email }
+            const result = await taskCollection.find(query).toArray()
+            res.send(result)
+        })
     }
     finally {
         
